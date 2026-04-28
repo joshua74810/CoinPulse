@@ -9,7 +9,7 @@ const  pathname = usePathname();
         <header>
             <div className = " main-container inner">
                 <Link href = "/">
-                <Image src = "logo.svg" alt = "CoinPulse Logo" 
+                <Image src = "/logo.svg" alt = "CoinPulse Logo" 
                 width ={132} height = {40}  />
                 </Link>
             
