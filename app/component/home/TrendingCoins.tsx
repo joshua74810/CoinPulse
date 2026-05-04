@@ -9,7 +9,7 @@ import DataTable from '../DataTable';
 const TrendingCoins = async () => {
   let trendingCoins;
   try {
-    const { coins } = await fetcher<{ coins: TrendingCoin[] }>(
+    trendingCoins = await fetcher<{ coins: TrendingCoin[] }>(
       '/search/trending',
       undefined,
       300
@@ -85,15 +85,15 @@ const TrendingCoins = async () => {
       <div id="trending-coins">
         <h4> Trading Coins</h4>
         <DataTable
-          data={(coins ?? []).slice(0, 6)}
-          columns={columns}
-          rowKey={(coin) => coin.item.id}
-          tableClassName="trending-coins-table"
-          headerCellClassName="py-3!"
-          bodyCellClassName="py-2!"
-        />
-      </div>
-    );
+          data={trendingCoins?.coins .slice(0, 6) || []}
+        columns={columns}
+        rowKey={(coin) => coin.item.id}
+        tableClassName="trending-coins-table"
+        headerCellClassName="py-3!"
+        bodyCellClassName="py-2!"
+      />
+    </div>
+  );
 };
 
 export default TrendingCoins;

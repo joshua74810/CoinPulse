@@ -25,7 +25,7 @@ export async function fetcher<T>(
     );
     const res = await fetch(url, {
         headers: {
-            "x-cg-demo-api-key": API_KEY,
+            "x-cg-demo-api-key": API_KEY!,
         },
         next: { revalidate },
     });
