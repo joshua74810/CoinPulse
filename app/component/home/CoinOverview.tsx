@@ -1,37 +1,49 @@
 import React from "react";
 import { fetcher } from "@/lib/coingecko.actions";
 import Image from "next/image";
-import { formatUsd } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
+import { CoinOverviewFallback } from "./fallback";
+import CandlestickChart from "@/app/component/CandlestickChart";
+
+
 
 const CoinOverview = async () => {
-  let coin;
+  let coin: CoinDetailsData;
+  let coinOHLCData: OHLCData[];
+
   try {
-    coin = await fetcher<CoinDetailsData>('/coins/bitcoin', {
-      dex_pair_format: 'symbol',
-    });
+    [coin, coinOHLCData] = await Promise.all([
+      fetcher<CoinDetailsData>('/coins/bitcoin', {
+        dex_pair_format: 'symbol',
+      }),
+      fetcher<OHLCData[]>('/coins/bitcoin/ohlc', {
+        vs_currency: 'usd',
+        days: '1',
+        precision: 'full',
+      }),
+    ]);
   } catch (error) {
     console.error('Failed to load coin overview', error);
-    return (
-      <div id="coin-overview-error" className="coin-overview-error">
-        <p>Unable to load coin overview right now.</p>
-      </div>
-    );
+    return <CoinOverviewFallback />;
   }
 
-    return (
-      <div id="coin-overview">
+  return (
+    <div id="coin-overview">
+      <CandlestickChart data={coinOHLCData} coinId="bitcoin">
         <div className="header">
           <Image src={coin.image.large} alt={coin.name} width={56} height={56} />
+        
 
           <div className="info">
             <p>
               {coin.name}/{coin.symbol.toUpperCase()}
             </p>
-            <h1>{formatUsd(coin.market_data.current_price.usd)}</h1>
+            <h1>{formatCurrency(coin.market_data.current_price.usd)}</h1>
           </div>
         </div>
-      </div>
-    );
+      </CandlestickChart>
+    </div>
+  );
 };
 
 export default CoinOverview;

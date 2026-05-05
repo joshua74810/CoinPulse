@@ -32,9 +32,15 @@ export async function fetcher<T>(
 
     if (!res.ok) {
         const errorBody: CoinGeckoErrorBody = await res.json().catch(() => ({}));
+        const apiError =
+            typeof errorBody.error === "string"
+                ? errorBody.error
+                : errorBody.error
+                  ? JSON.stringify(errorBody.error)
+                  : res.statusText;
 
         throw new Error(
-            `Coingecko API Error: ${res.status}: ${errorBody.error || res.statusText}`,
+            `Coingecko API Error: ${res.status}: ${apiError}`,
         );
     }
     return res.json();
