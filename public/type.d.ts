@@ -245,6 +245,7 @@ interface Category {
   market_cap_change_24h: number;
   market_cap: number;
   volume_24h: number;
+  volume_24h_Volume: number;
 }
 
 interface UseCoinGeckoWebSocketProps {
@@ -262,7 +263,9 @@ interface UseCoinGeckoWebSocketReturn {
 
 interface DataTableColumn<T> {
   header: React.ReactNode;
+  header?: string;
   cell: (row: T, index: number) => React.ReactNode;
+  cell?: string;
   headClassName?: string;
   cellClassName?: string;
 }
